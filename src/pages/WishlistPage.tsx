@@ -1,44 +1,82 @@
-import { useState } from 'react'
-import type { FormEvent } from 'react'
+import { useCallback, useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import MovieCard from '../components/MovieCard'
+import type { Movie } from '../hooks/useMovies'
+import { useWishlist } from '../hooks/useWishlist'
 
+const createMovieFromWishlist = (entry: { id: number; title: string; poster_path: string | null }): Movie => ({
+  id: entry.id,
+  title: entry.title,
+  overview: 'Saved locally from TMDB browsing sessions.',
+  poster_path: entry.poster_path,
+})
+
+/**
+ * The Wishlist page retrieves all movie data exclusively from LocalStorage and does not perform any
+ * API calls. This demonstrates end-to-end client-side state management and persistence.
+ */
 const WishlistPage = () => {
-  const [wishlist, setWishlist] = useState<string[]>([])
-  const [title, setTitle] = useState('')
+  const { wishlist, toggleWishlist } = useWishlist()
+  const wishlistMovies = useMemo(() => wishlist.map((entry) => createMovieFromWishlist(entry)), [wishlist])
 
-  const handleAdd = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (!title.trim()) return
-    setWishlist((prev) => [title.trim(), ...prev])
-    setTitle('')
-  }
+  const handleRemove = useCallback(
+    (movie: Movie) => {
+      toggleWishlist({
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path ?? null,
+      })
+    },
+    [toggleWishlist],
+  )
+
+  const wishlistCount = wishlistMovies.length
+  const isEmpty = wishlistCount === 0
 
   return (
-    <div className="page">
+    <div className="page wishlist-page">
       <section className="page-hero">
         <p className="eyebrow">Wishlist</p>
-        <h1>Track movies you want to stream once they hit TMDB.</h1>
+        <h1>All of your saved TMDB titles live here.</h1>
         <p>
-          Because LocalStorage is already hydrated with your profile, any personalized feature can
-          live entirely on the client. Expand this list by syncing with your own endpoints.
+          Every card below is sourced straight from <code>LocalStorage</code> without calling TMDB
+          again. Tap a card to remove it and the change instantly syncs everywhere in the app.
         </p>
       </section>
 
-      <form className="wishlist-form" onSubmit={handleAdd}>
-        <input
-          type="text"
-          placeholder="Add a movie or TV title"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-        <button type="submit">Save</button>
-      </form>
+      <section className="wishlist-summary">
+        <article>
+          <header>Saved titles</header>
+          <strong>{wishlistCount}</strong>
+          <p>{isEmpty ? 'Your wishlist is empty.' : 'Tap any card to remove it instantly.'}</p>
+        </article>
+        <article>
+          <header>Storage</header>
+          <strong>LocalStorage</strong>
+          <p>Synced to the <code>movieWishlist</code> key and shared with every page.</p>
+        </article>
+      </section>
 
-      <ul className="wishlist-list">
-        {wishlist.length === 0 && <li className="empty">Your wishlist is empty.</li>}
-        {wishlist.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+      {isEmpty ? (
+        <div className="wishlist-empty">
+          <p>You have no movies in your wishlist yet.</p>
+          <p>Add favorites from any MovieCard or jump back into discovery below.</p>
+          <div className="wishlist-empty__actions">
+            <Link className="wishlist-action" to="/">
+              Browse Home
+            </Link>
+            <Link className="wishlist-action ghost" to="/popular">
+              Explore Popular
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <div className="wishlist-grid" aria-live="polite">
+          {wishlistMovies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} wished onToggleWishlist={handleRemove} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
