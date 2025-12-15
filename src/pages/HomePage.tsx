@@ -80,7 +80,7 @@ const HomePage = () => {
           <article>
             <header>Wishlist</header>
             <strong>{wishlist.length} saved</strong>
-            <p>Tap any title to toggle its wishlist state in-place.</p>
+            <p>Use the star button on any card to toggle its wishlist state in-place.</p>
           </article>
         </div>
       </section>
