@@ -30,10 +30,10 @@ const TMDB_BACKDROP_BASE = 'https://image.tmdb.org/t/p/original'
 const FALLBACK_POSTER = '/poster-fallback.svg'
 
 const formatReleaseDate = (value?: string) => {
-  if (!value) return 'Unknown release date'
+  if (!value) return '개봉일 정보 없음'
   const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return 'Unknown release date'
-  return new Intl.DateTimeFormat('en-US', {
+  if (Number.isNaN(date.getTime())) return '개봉일 정보 없음'
+  return new Intl.DateTimeFormat('ko-KR', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
@@ -45,9 +45,9 @@ const formatRuntime = (value?: number) => {
   const hours = Math.floor(value / 60)
   const minutes = value % 60
   if (hours > 0) {
-    return `${hours}h ${minutes}m`
+    return `${hours}시간 ${minutes}분`
   }
-  return `${minutes}m`
+  return `${minutes}분`
 }
 
 const MovieDetailPage = () => {
@@ -65,14 +65,14 @@ const MovieDetailPage = () => {
 
   const fetchMovie = useCallback(async () => {
     if (!id) {
-      setError('Movie ID is missing from the URL.')
+      setError('URL에 영화 ID가 없습니다.')
       setMovie(null)
       setLoading(false)
       return
     }
 
     if (!resolvedKey) {
-      setError('Add your TMDB API key on the sign-in page to load detailed data.')
+      setError('상세 정보를 불러오려면 로그인 페이지에서 TMDB API 키를 등록해주세요.')
       setMovie(null)
       setLoading(false)
       return
@@ -88,6 +88,7 @@ const MovieDetailPage = () => {
     try {
       const useBearer = resolvedKey.startsWith('eyJ')
       const url = new URL(`${TMDB_BASE_URL}/movie/${id}`)
+      url.searchParams.set('language', 'ko-KR')
 
       if (!useBearer) {
         url.searchParams.set('api_key', resolvedKey)
@@ -108,18 +109,18 @@ const MovieDetailPage = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          throw new Error('TMDB rejected the provided API key. Double-check it and try again.')
+          throw new Error('TMDB에서 제공된 API 키를 거부했습니다. 키를 다시 확인한 뒤 시도해주세요.')
         }
         if (response.status === 404) {
-          throw new Error('We could not find a movie with that TMDB ID.')
+          throw new Error('해당 ID의 영화 정보를 찾을 수 없습니다.')
         }
-        throw new Error('Unable to load this movie right now. Please try again shortly.')
+        throw new Error('지금은 이 영화를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
       }
 
       const payload = (await response.json()) as MovieDetail
       const normalized: MovieDetail = {
         ...payload,
-        title: payload.title || payload.name || 'Untitled',
+        title: payload.title || payload.name || '제목 미정',
       }
 
       setMovie(normalized)
@@ -130,7 +131,7 @@ const MovieDetailPage = () => {
       setError(
         fetchError instanceof Error
           ? fetchError.message
-          : 'Something went wrong while loading this TMDB title.',
+          : '이 작품을 불러오는 중 문제가 발생했습니다.',
       )
     } finally {
       if (abortRef.current === controller) {
@@ -167,7 +168,7 @@ const MovieDetailPage = () => {
     : undefined
   const formattedRelease = formatReleaseDate(movie?.release_date)
   const runtimeLabel = formatRuntime(movie?.runtime)
-  const overviewText = movie?.overview?.trim() || 'No overview available.'
+  const overviewText = movie?.overview?.trim() || '설명이 준비되어 있지 않습니다.'
   const ratingLabel =
     typeof movie?.vote_average === 'number' ? movie.vote_average.toFixed(1) : 'NR'
 
@@ -191,19 +192,19 @@ const MovieDetailPage = () => {
       <div className="movie-detail" style={backdropStyle}>
         <div className="movie-detail__panel">
           <button type="button" className="detail-back-btn" onClick={handleBack}>
-            ← Back
+            ← 뒤로가기
           </button>
           {loading ? (
             <div className="movie-detail__status" role="status">
               <span className="loading-spinner" aria-hidden="true" />
-              <p>Loading details...</p>
+              <p>상세 정보를 불러오는 중...</p>
             </div>
           ) : error ? (
             <div className="movie-detail__status movie-detail__status--error" role="alert">
               <p>{error}</p>
               <div className="movie-detail__status-actions">
                 <button type="button" onClick={fetchMovie}>
-                  Retry
+                  다시 시도
                 </button>
               </div>
             </div>
@@ -211,31 +212,31 @@ const MovieDetailPage = () => {
             <div className="movie-detail__content" aria-live="polite">
               <div className="movie-detail__hero">
                 <div className="movie-detail__poster">
-                  <img src={posterUrl} alt={`${movie.title} poster`} />
+                  <img src={posterUrl} alt={`${movie.title} 포스터`} />
                 </div>
                 <div className="movie-detail__info">
-                  <p className="movie-detail__eyebrow">Now Viewing</p>
+                  <p className="movie-detail__eyebrow">지금 감상 중</p>
                   <h1>{movie.title}</h1>
                   {movie.tagline && (
                     <p className="movie-detail__tagline">&ldquo;{movie.tagline}&rdquo;</p>
                   )}
                   <div className="movie-detail__meta">
                     <div>
-                      <span>Average Rating</span>
+                      <span>평균 평점</span>
                       <strong>{ratingLabel}</strong>
                     </div>
                     <div>
-                      <span>Release Date</span>
+                      <span>개봉일</span>
                       <strong>{formattedRelease}</strong>
                     </div>
                     {runtimeLabel && (
                       <div>
-                        <span>Runtime</span>
+                        <span>상영 시간</span>
                         <strong>{runtimeLabel}</strong>
                       </div>
                     )}
                   </div>
-                  <div className="movie-detail__genres" aria-label="Genres">
+                  <div className="movie-detail__genres" aria-label="장르">
                     {(movie.genres ?? []).length > 0 ? (
                       (movie.genres ?? []).map((genre) => (
                         <span key={genre.id} className="movie-detail__genre">
@@ -244,7 +245,7 @@ const MovieDetailPage = () => {
                       ))
                     ) : (
                       <span className="movie-detail__genre movie-detail__genre--placeholder">
-                        No genres listed
+                        등록된 장르가 없습니다
                       </span>
                     )}
                   </div>
@@ -255,7 +256,7 @@ const MovieDetailPage = () => {
                       className={`detail-wishlist ${isWishlisted ? 'is-active' : ''}`}
                       onClick={handleWishlistToggle}
                     >
-                      {isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                      {isWishlisted ? '위시리스트에서 제거' : '위시리스트에 추가'}
                     </button>
                   </div>
                 </div>

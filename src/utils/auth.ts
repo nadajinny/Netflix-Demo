@@ -49,7 +49,7 @@ export const saveUsers = (users: StoredUser[]) => {
 export const registerUser = (email: string, password: string) => {
   const users = readUsers()
   if (users.some((user) => user.id === email)) {
-    return { success: false, message: 'That email is already registered.' }
+    return { success: false, message: '이미 등록된 이메일입니다.' }
   }
 
   const updated = [...users, { id: email, password }]
@@ -63,7 +63,7 @@ export const authenticateUser = (email: string, password: string) => {
   const match = users.find((user) => user.id === email && user.password === password)
 
   if (!match) {
-    return { success: false, message: 'Invalid credentials provided.' }
+    return { success: false, message: '입력하신 정보가 올바르지 않습니다.' }
   }
 
   return { success: true, tmdbKey: match.password }

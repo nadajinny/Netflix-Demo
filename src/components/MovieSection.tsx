@@ -24,12 +24,14 @@ const MovieSection = ({
     <section className="movie-section" aria-label={title}>
       <div className="movie-section__header">
         <h2>{title}</h2>
-        {movies.length > 0 && <span className="movie-section__count">{movies.length} titles</span>}
+        {movies.length > 0 && (
+          <span className="movie-section__count">{movies.length}편의 작품</span>
+        )}
       </div>
 
       {loading && (
         <div className="section-feedback section-feedback--loading" role="status">
-          <span className="loading-spinner" aria-hidden="true" /> Loading {title}...
+          <span className="loading-spinner" aria-hidden="true" /> {title} 불러오는 중...
         </div>
       )}
 
@@ -41,7 +43,7 @@ const MovieSection = ({
 
       {!loading && !error && movies.length === 0 && (
         <div className="section-feedback section-feedback--empty">
-          No titles available right now. Please check back later.
+          지금은 표시할 작품이 없습니다. 잠시 후 다시 확인해주세요.
         </div>
       )}
 

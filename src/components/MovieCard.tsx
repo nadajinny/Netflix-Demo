@@ -18,7 +18,7 @@ const FALLBACK_POSTER = '/poster-fallback.svg'
  */
 const getOverviewSnippet = (overview?: string) => {
   if (!overview || !overview.trim()) {
-    return 'TMDB has not provided an overview for this title yet.'
+    return '아직 이 작품에 대한 소개가 제공되지 않았습니다.'
   }
   const trimmed = overview.trim()
   return trimmed.length > 140 ? `${trimmed.slice(0, 137)}...` : trimmed
@@ -54,12 +54,12 @@ const MovieCard = ({ movie, wished, onToggleWishlist }: MovieCardProps) => {
       role="link"
       tabIndex={0}
       aria-labelledby={titleId}
-      aria-label={`View details for ${movie.title}`}
+      aria-label={`${movie.title} 상세 정보 보기`}
       onClick={handleNavigate}
       onKeyDown={handleKeyDown}
     >
       <div className="movie-card__poster">
-        <img src={posterUrl} alt={`${movie.title} poster`} loading="lazy" />
+        <img src={posterUrl} alt={`${movie.title} 포스터`} loading="lazy" />
       </div>
       <div className="movie-card__body">
         <div className="movie-card__title-row">
@@ -69,9 +69,7 @@ const MovieCard = ({ movie, wished, onToggleWishlist }: MovieCardProps) => {
             className={`wishlist-toggle ${wished ? 'is-active' : ''}`}
             onClick={handleWishlistClick}
             aria-pressed={wished}
-            aria-label={`${wished ? 'Remove' : 'Add'} ${movie.title} ${
-              wished ? 'from' : 'to'
-            } wishlist`}
+            aria-label={`${movie.title}를 위시리스트${wished ? '에서 제거' : '에 추가'}`}
           >
             <span className="wishlist-indicator" aria-hidden="true">
               {wished ? '★' : '☆'}

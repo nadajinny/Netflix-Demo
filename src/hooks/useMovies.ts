@@ -48,7 +48,7 @@ export const useMovies = (endpoint: string, options?: UseMoviesOptions): UseMovi
     if (!tmdbKey) {
       setMovies([])
       setLoading(false)
-      setError('Add your TMDB key on the sign-in screen to load movies.')
+      setError('영화를 불러오려면 로그인 화면에서 TMDB 키를 등록해주세요.')
       return () => {
         controller.abort()
       }
@@ -80,15 +80,15 @@ export const useMovies = (endpoint: string, options?: UseMoviesOptions): UseMovi
 
         if (!response.ok) {
           if (response.status === 401) {
-            throw new Error('TMDB rejected the provided API key. Double-check it and try again.')
+            throw new Error('TMDB에서 제공된 API 키를 거부했습니다. 키를 다시 확인한 뒤 시도해주세요.')
           }
-          throw new Error('TMDB responded with an error. Please try again later.')
+          throw new Error('영화 데이터를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
         }
 
         const payload = (await response.json()) as { results?: Movie[] }
         const normalized = (payload.results ?? []).map((movie) => ({
           ...movie,
-          title: movie.title || movie.name || 'Untitled',
+          title: movie.title || movie.name || '제목 미정',
         }))
 
         if (!ignore) {
@@ -102,7 +102,7 @@ export const useMovies = (endpoint: string, options?: UseMoviesOptions): UseMovi
         setError(
           fetchError instanceof Error
             ? fetchError.message
-            : 'Something went wrong while loading movies.',
+            : '영화를 불러오는 중 문제가 발생했습니다.',
         )
       } finally {
         if (!ignore) {

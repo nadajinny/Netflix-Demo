@@ -24,33 +24,33 @@ type Filters = {
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3'
 
 const SORT_OPTIONS: { label: string; value: SortOptionValue }[] = [
-  { label: 'Popularity (High -> Low)', value: 'popularity.desc' },
-  { label: 'Popularity (Low -> High)', value: 'popularity.asc' },
-  { label: 'Rating (High -> Low)', value: 'vote_average.desc' },
-  { label: 'Release Date (Newest)', value: 'release_date.desc' },
-  { label: 'Release Date (Oldest)', value: 'release_date.asc' },
+  { label: '인기도 (높은 순)', value: 'popularity.desc' },
+  { label: '인기도 (낮은 순)', value: 'popularity.asc' },
+  { label: '평점 (높은 순)', value: 'vote_average.desc' },
+  { label: '개봉일 (최신순)', value: 'release_date.desc' },
+  { label: '개봉일 (오래된순)', value: 'release_date.asc' },
 ]
 
 const GENRE_OPTIONS = [
-  { label: 'All Genres', value: '' },
-  { label: 'Action', value: '28' },
-  { label: 'Adventure', value: '12' },
-  { label: 'Animation', value: '16' },
-  { label: 'Comedy', value: '35' },
-  { label: 'Crime', value: '80' },
-  { label: 'Documentary', value: '99' },
-  { label: 'Drama', value: '18' },
-  { label: 'Family', value: '10751' },
-  { label: 'Fantasy', value: '14' },
-  { label: 'History', value: '36' },
-  { label: 'Horror', value: '27' },
-  { label: 'Music', value: '10402' },
-  { label: 'Mystery', value: '9648' },
-  { label: 'Romance', value: '10749' },
-  { label: 'Science Fiction', value: '878' },
-  { label: 'Thriller', value: '53' },
-  { label: 'War', value: '10752' },
-  { label: 'Western', value: '37' },
+  { label: '전체 장르', value: '' },
+  { label: '액션', value: '28' },
+  { label: '어드벤처', value: '12' },
+  { label: '애니메이션', value: '16' },
+  { label: '코미디', value: '35' },
+  { label: '범죄', value: '80' },
+  { label: '다큐멘터리', value: '99' },
+  { label: '드라마', value: '18' },
+  { label: '가족', value: '10751' },
+  { label: '판타지', value: '14' },
+  { label: '역사', value: '36' },
+  { label: '공포', value: '27' },
+  { label: '음악', value: '10402' },
+  { label: '미스터리', value: '9648' },
+  { label: '로맨스', value: '10749' },
+  { label: 'SF', value: '878' },
+  { label: '스릴러', value: '53' },
+  { label: '전쟁', value: '10752' },
+  { label: '서부', value: '37' },
 ]
 
 const YEAR_OPTIONS = (() => {
@@ -104,8 +104,8 @@ const applyFilterPipeline = (source: Movie[], filters: Filters) => {
 const isV4Token = (key: string) => key.trim().startsWith('eyJ')
 
 /**
- * The Search page allows users to filter and sort movie data dynamically using TMDB API parameters
- * and client-side data processing. This demonstrates interactive data handling and state-driven UI
+ * The Search page allows users to filter and sort movie data dynamically using API parameters and
+ * client-side data processing. This demonstrates interactive data handling and state-driven UI
  * updates in a SPA.
  */
 const SearchPage = () => {
@@ -168,7 +168,7 @@ const SearchPage = () => {
     async (targetFilters: Filters) => {
       if (!resolvedKey) {
         setMovies([])
-        setError('Add your TMDB API key on the sign-in page to unlock the search catalog.')
+        setError('검색 기능을 사용하려면 로그인 페이지에서 TMDB API 키를 등록해주세요.')
         setLoading(false)
         return
       }
@@ -185,7 +185,7 @@ const SearchPage = () => {
         const useBearer = isV4Token(resolvedKey)
         const url = new URL(`${TMDB_BASE_URL}${endpoint}`)
 
-        url.searchParams.set('language', 'en-US')
+        url.searchParams.set('language', 'ko-KR')
         url.searchParams.set('include_adult', 'false')
         url.searchParams.set('page', '1')
 
@@ -227,15 +227,15 @@ const SearchPage = () => {
 
         if (!response.ok) {
           if (response.status === 401) {
-            throw new Error('TMDB rejected the provided API key. Double-check it and try again.')
+            throw new Error('TMDB에서 제공된 API 키를 거부했습니다. 키를 다시 확인한 뒤 시도해주세요.')
           }
-          throw new Error('Unable to load TMDB search results right now. Please try again shortly.')
+          throw new Error('지금은 검색 결과를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
         }
 
         const payload = (await response.json()) as { results?: Movie[] }
         const normalized = (payload.results ?? []).map((movie) => ({
           ...movie,
-          title: movie.title || movie.name || 'Untitled',
+          title: movie.title || movie.name || '제목 미정',
         }))
         const filtered = applyFilterPipeline(normalized, targetFilters)
         setMovies(filtered)
@@ -247,7 +247,7 @@ const SearchPage = () => {
         setError(
           fetchError instanceof Error
             ? fetchError.message
-            : 'Something went wrong while searching TMDB.',
+            : '영화를 검색하는 중 문제가 발생했습니다.',
         )
       } finally {
         if (requestController.current === controller) {
@@ -262,7 +262,7 @@ const SearchPage = () => {
   useEffect(() => {
     if (!resolvedKey) {
       setMovies([])
-      setError('Add your TMDB key via the sign-in page to start searching TMDB.')
+      setError('검색 기능을 사용하려면 로그인 페이지에서 TMDB 키를 연동해주세요.')
       setLoading(false)
       firstLoadRef.current = true
       return
@@ -306,39 +306,40 @@ const SearchPage = () => {
     setFiltersExpanded((current) => !current)
   }
 
-  const wishlistStatus = wishlist.length === 0 ? 'Wishlist: empty' : `Wishlist: ${wishlist.length}`
+  const wishlistStatus =
+    wishlist.length === 0 ? '위시리스트: 비어 있음' : `위시리스트: ${wishlist.length}개`
 
   const showEmptyState = hasFetched && !loading && !error && movies.length === 0
 
   return (
     <div className="page search-page">
       <section className="page-hero">
-        <p className="eyebrow">Search TMDB</p>
-        <h1>Filter, sort, and wishlist TMDB titles without leaving the browser.</h1>
-        <p>Type a keyword or use filters to refine the feed in real time.</p>
+        <p className="eyebrow">콘텐츠 검색</p>
+        <h1>브라우저에서 바로 작품을 검색하고 정렬해 보세요.</h1>
+        <p>키워드를 입력하거나 필터를 사용해 실시간으로 결과를 좁혀보세요.</p>
       </section>
 
       <form className="search-panel" onSubmit={handleSubmit}>
         <div className="search-panel__query">
-          <label htmlFor="search-query">Keyword</label>
+          <label htmlFor="search-query">키워드</label>
           <div className="search-panel__query-input">
             <input
               id="search-query"
               name="query"
               type="search"
-              placeholder='Try "Spider-Man", "Oppenheimer", ...'
+              placeholder='예: "스파이더맨", "오펜하이머"...'
               value={filters.query}
               onChange={handleQueryChange}
               autoComplete="off"
             />
-            <button type="submit">Search</button>
+            <button type="submit">검색</button>
           </div>
         </div>
 
         <div className="search-panel__toggle-row">
-          <span className="search-panel__hint">Filters update automatically.</span>
+          <span className="search-panel__hint">필터는 자동으로 적용됩니다.</span>
           <button type="button" className="search-panel__toggle" onClick={handleToggleFilters}>
-            {filtersExpanded ? 'Hide Filters' : 'Show Filters'}
+            {filtersExpanded ? '필터 숨기기' : '필터 보기'}
           </button>
         </div>
 
@@ -347,7 +348,7 @@ const SearchPage = () => {
           aria-hidden={!filtersExpanded}
         >
           <div className="filter-group">
-            <label htmlFor="genre-filter">Genre</label>
+            <label htmlFor="genre-filter">장르</label>
             <select
               id="genre-filter"
               name="genre"
@@ -363,7 +364,7 @@ const SearchPage = () => {
           </div>
 
           <div className="filter-group">
-            <label htmlFor="sort-filter">Sorting</label>
+            <label htmlFor="sort-filter">정렬</label>
             <select
               id="sort-filter"
               name="sort"
@@ -379,7 +380,7 @@ const SearchPage = () => {
           </div>
 
           <div className="filter-group filter-group--slider">
-            <label htmlFor="rating-filter">Minimum rating</label>
+            <label htmlFor="rating-filter">최소 평점</label>
             <div className="filter-group__slider">
               <input
                 id="rating-filter"
@@ -391,20 +392,20 @@ const SearchPage = () => {
                 onChange={handleRatingChange}
               />
               <span className="filter-group__value">
-                {filters.rating > 0 ? `${filters.rating.toFixed(1)}+` : 'Any rating'}
+                {filters.rating > 0 ? `${filters.rating.toFixed(1)}+` : '모든 평점'}
               </span>
             </div>
           </div>
 
           <div className="filter-group">
-            <label htmlFor="year-filter">Release year</label>
+            <label htmlFor="year-filter">개봉 연도</label>
             <select
               id="year-filter"
               name="year"
               value={filters.year}
               onChange={handleSelectChange}
             >
-              <option value="">Any year</option>
+              <option value="">전체 연도</option>
               {yearOptions.map((year) => (
                 <option key={year} value={year}>
                   {year}
@@ -415,10 +416,10 @@ const SearchPage = () => {
 
           <div className="search-panel__actions">
             <button type="button" className="ghost-btn" onClick={handleResetFilters}>
-              Reset filters
+              필터 초기화
             </button>
             <button type="button" className="search-panel__refresh" onClick={() => fetchMovies(filters)}>
-              Refresh results
+              결과 새로고침
             </button>
           </div>
         </div>
@@ -426,10 +427,10 @@ const SearchPage = () => {
 
       <section className="search-status" aria-live="polite">
         <span className={`status-pill ${appliedFilterCount > 0 ? 'is-active' : ''}`}>
-          Filters: {appliedFilterCount}
+          필터: {appliedFilterCount}
         </span>
         <span className="status-pill">
-          {loading ? 'Loading...' : `Results: ${movies.length}`}
+          {loading ? '불러오는 중...' : `결과: ${movies.length}건`}
         </span>
         <span className="status-pill">{wishlistStatus}</span>
       </section>
@@ -447,9 +448,9 @@ const SearchPage = () => {
         </div>
 
         {loading && (
-          <div className="search-results__overlay" aria-label="Loading TMDB search results">
+          <div className="search-results__overlay" aria-label="검색 결과 불러오는 중">
             <span className="loading-spinner" aria-hidden="true" />
-            <span>Loading TMDB data...</span>
+            <span>데이터를 불러오는 중...</span>
           </div>
         )}
       </div>
@@ -458,13 +459,13 @@ const SearchPage = () => {
         <div className="search-feedback search-feedback--error" role="alert">
           {error}
           <button type="button" onClick={() => fetchMovies(filters)}>
-            Retry
+            다시 시도
           </button>
         </div>
       )}
 
       {showEmptyState && (
-        <p className="search-feedback search-feedback--empty">No movies match right now.</p>
+        <p className="search-feedback search-feedback--empty">조건에 맞는 영화가 없습니다.</p>
       )}
     </div>
   )

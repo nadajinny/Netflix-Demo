@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
-    throw new Error('useAuth must be used inside AuthProvider')
+    throw new Error('useAuth 훅은 AuthProvider 내부에서만 사용해야 합니다.')
   }
   return context
 }

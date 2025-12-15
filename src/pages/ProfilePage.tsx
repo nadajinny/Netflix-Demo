@@ -131,14 +131,16 @@ const ProfilePage = () => {
   }
 
   const wishlistSummary =
-    wishlistCount === 0 ? 'movieWishlist is empty.' : `${wishlistCount} saved in movieWishlist.`
+    wishlistCount === 0
+      ? '아직 위시리스트가 비어 있습니다.'
+      : `위시리스트에 ${wishlistCount}개가 저장되어 있습니다.`
 
   return (
     <div className="page profile-page">
       <section className="page-hero profile-intro">
-        <p className="eyebrow">Profile & Settings</p>
-        <h1>Personalize your MockFlix experience using only LocalStorage.</h1>
-        <p>Your auth state, theme, and wishlist all live in LocalStorage.</p>
+        <p className="eyebrow">프로필 & 설정</p>
+        <h1>한눈에 계정과 기기 설정을 확인하세요.</h1>
+        <p>로그인 상태, 테마, 위시리스트 정보를 편하게 관리할 수 있습니다.</p>
       </section>
 
       <section className="profile-overview">
@@ -147,38 +149,38 @@ const ProfilePage = () => {
             {avatarLetter}
           </div>
           <div className="profile-user-meta">
-            <p className="profile-label">Signed in as</p>
+            <p className="profile-label">로그인된 계정</p>
             <h2 className="profile-email" aria-live="polite">
-              {userEmail || 'Email unavailable'}
+              {userEmail || '이메일 정보를 찾을 수 없습니다'}
             </h2>
             <p className="profile-session">
               <span className={`status-dot ${loginState ? 'online' : 'offline'}`} aria-hidden="true" />
-              {loginState ? 'Session active' : 'Session ended'}
+              {loginState ? '세션 유지 중' : '세션 종료됨'}
             </p>
           </div>
         </article>
 
         <article className="profile-card profile-storage-card">
           <header>
-            <p className="profile-label">LocalStorage snapshot</p>
-            <h3>Key states at a glance</h3>
+            <p className="profile-label">기기 정보</p>
+            <h3>저장 상태</h3>
           </header>
           <ul>
             <li>
-              <span>isLogin</span>
-              <strong>{loginState ? 'true' : 'false'}</strong>
+              <span>로그인 유지</span>
+              <strong>{loginState ? 'ON' : 'OFF'}</strong>
             </li>
             <li>
-              <span>rememberId</span>
-              <strong>{rememberedEmail || 'empty'}</strong>
+              <span>저장된 이메일</span>
+              <strong>{rememberedEmail || '없음'}</strong>
             </li>
             <li>
-              <span>movieWishlist</span>
+              <span>위시리스트</span>
               <strong>{wishlistCount}</strong>
             </li>
             <li>
-              <span>theme</span>
-              <strong>{theme}</strong>
+              <span>현재 테마</span>
+              <strong>{theme === 'dark' ? '다크' : '라이트'}</strong>
             </li>
           </ul>
         </article>
@@ -187,43 +189,41 @@ const ProfilePage = () => {
       <section className="profile-grid">
         <article className="profile-card stat-card">
           <header>
-            <p className="profile-label">Wishlist summary</p>
-            <h3>Saved movies</h3>
+            <p className="profile-label">위시리스트 요약</p>
+            <h3>저장된 영화</h3>
           </header>
           <div className="stat-value">{wishlistCount}</div>
           <p>{wishlistSummary}</p>
           <button type="button" className="pill-button" onClick={handleViewWishlist}>
-            View Wishlist
+            위시리스트 보기
           </button>
         </article>
 
         <article className="profile-card stat-card">
           <header>
-            <p className="profile-label">Remembered login</p>
-            <h3>Email memory</h3>
+            <p className="profile-label">저장된 로그인 정보</p>
+            <h3>저장된 이메일</h3>
           </header>
-          <div className="stat-value">{rememberedEmail || 'Not stored'}</div>
-          <p>
-            Stored under <code>rememberId</code> for quick sign-ins.
-          </p>
+          <div className="stat-value">{rememberedEmail || '저장되지 않음'}</div>
+          <p>빠른 로그인을 위해 이 기기에 저장됩니다.</p>
         </article>
       </section>
 
       <section className="profile-grid settings-grid">
         <article className="profile-card theme-card">
           <header>
-            <p className="profile-label">Theme preference</p>
-            <h3>Dark vs Light</h3>
+            <p className="profile-label">테마 설정</p>
+            <h3>다크 vs 라이트</h3>
           </header>
-          <p>Saved to the <code>theme</code> key.</p>
-          <div className="theme-toggle" role="group" aria-label="Theme toggle">
+          <p>선택한 모드는 이 기기에 저장돼요.</p>
+          <div className="theme-toggle" role="group" aria-label="테마 전환">
             <button
               type="button"
               className={theme === 'dark' ? 'is-active' : ''}
               onClick={() => handleThemeChoice('dark')}
               aria-pressed={theme === 'dark'}
             >
-              Dark
+              다크
             </button>
             <button
               type="button"
@@ -231,7 +231,7 @@ const ProfilePage = () => {
               onClick={() => handleThemeChoice('light')}
               aria-pressed={theme === 'light'}
             >
-              Light
+              라이트
             </button>
             <span className={`theme-toggle__thumb ${theme}`} aria-hidden="true" />
           </div>
@@ -239,12 +239,12 @@ const ProfilePage = () => {
 
         <article className="profile-card logout-card">
           <header>
-            <p className="profile-label">Logout</p>
-            <h3>End this session</h3>
+            <p className="profile-label">로그아웃</p>
+            <h3>이 세션 종료</h3>
           </header>
-          <p>Clears <code>isLogin</code> and <code>TMDb-Key</code>.</p>
+          <p>저장된 로그인 정보와 TMDB 키가 삭제됩니다.</p>
           <button type="button" className="logout-button" onClick={handleLogout}>
-            Log out
+            로그아웃
           </button>
         </article>
       </section>
