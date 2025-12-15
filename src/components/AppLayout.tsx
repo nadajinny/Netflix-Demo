@@ -2,11 +2,11 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 const navItems = [
-  { path: '/', label: 'Browse' },
-  { path: '/popular', label: 'Popular' },
-  { path: '/search', label: 'Search' },
-  { path: '/wishlist', label: 'Wishlist' },
-  { path: '/profile', label: 'Profile' },
+  { path: '/', label: '둘러보기' },
+  { path: '/popular', label: '인기' },
+  { path: '/search', label: '검색' },
+  { path: '/wishlist', label: '위시리스트' },
+  { path: '/profile', label: '프로필' },
 ]
 
 const AppLayout = () => {
@@ -21,14 +21,14 @@ const AppLayout = () => {
   const formattedKey =
     tmdbKey.length > 10
       ? `${tmdbKey.slice(0, 4)}...${tmdbKey.slice(-4)}`
-      : tmdbKey || 'Not linked'
+      : tmdbKey || '연동되지 않음'
 
   return (
     <div className="app-shell">
       <header className="app-header">
         <div className="branding">
-          <span className="brand-mark">MockFlix</span>
-          <span className="brand-subtitle">TMDB Demo Portal</span>
+          <span className="brand-mark">NaDaflix</span>
+          <span className="brand-subtitle">TMDB 데모 포털</span>
         </div>
 
         <nav className="main-nav">
@@ -47,11 +47,11 @@ const AppLayout = () => {
         </nav>
 
         <div className="header-actions">
-          <span className="tmdb-chip" title={tmdbKey || 'TMDB key missing'}>
-            TMDB Key: {formattedKey}
+          <span className="tmdb-chip" title={tmdbKey || 'TMDB 키가 없습니다'}>
+            TMDB 키: {formattedKey}
           </span>
           <button type="button" className="ghost-btn" onClick={handleLogout}>
-            Log out
+            로그아웃
           </button>
         </div>
       </header>

@@ -63,20 +63,20 @@ const SignInPage = () => {
     const password = loginForm.password.trim()
 
     if (!validateEmail(email)) {
-      showStatus('error', 'Please enter a valid email address.')
+      showStatus('error', '올바른 이메일 주소를 입력해주세요.')
       setIsSubmitting(false)
       return
     }
 
     if (password.length === 0) {
-      showStatus('error', 'Your TMDB API key is required to sign in.')
+      showStatus('error', '로그인하려면 TMDB API 키가 필요합니다.')
       setIsSubmitting(false)
       return
     }
 
     const result = authenticateUser(email, password)
     if (!result.success) {
-      showStatus('error', 'No matching user found for that email & TMDB key.')
+      showStatus('error', '해당 이메일과 TMDB 키로 등록된 사용자를 찾을 수 없습니다.')
       setIsSubmitting(false)
       return
     }
@@ -88,7 +88,7 @@ const SignInPage = () => {
     }
 
     loginWithKey(password)
-    showStatus('success', 'Login successful! Redirecting you now...')
+    showStatus('success', '로그인에 성공했습니다! 곧 이동합니다...')
     setTimeout(() => navigate(redirectPath, { replace: true }), 600)
     setIsSubmitting(false)
   }
@@ -103,37 +103,37 @@ const SignInPage = () => {
     const confirm = signupForm.confirm.trim()
 
     if (!validateEmail(email)) {
-      showStatus('error', 'Enter a valid email before registering.')
+      showStatus('error', '회원가입 전에 올바른 이메일을 입력해주세요.')
       setIsSubmitting(false)
       return
     }
 
     if (password.length === 0) {
-      showStatus('error', 'Please provide your TMDB API key.')
+      showStatus('error', 'TMDB API 키를 입력해주세요.')
       setIsSubmitting(false)
       return
     }
 
     if (password !== confirm) {
-      showStatus('error', 'TMDB API key confirmation does not match.')
+      showStatus('error', 'TMDB API 키 확인 값이 일치하지 않습니다.')
       setIsSubmitting(false)
       return
     }
 
     if (!signupForm.agree) {
-      showStatus('error', 'You must agree to the academic usage terms.')
+      showStatus('error', '학습용 사용 조건에 동의해야 합니다.')
       setIsSubmitting(false)
       return
     }
 
     const result = registerUser(email, password)
     if (!result.success) {
-      showStatus('error', result.message ?? 'Unable to complete registration.')
+      showStatus('error', result.message ?? '회원가입을 완료할 수 없습니다.')
       setIsSubmitting(false)
       return
     }
 
-    showStatus('success', 'Account created! Please sign in with your TMDB key.')
+    showStatus('success', '계정이 생성되었습니다! TMDB 키로 로그인해주세요.')
     setSignupForm({
       email: '',
       password: '',
@@ -152,39 +152,38 @@ const SignInPage = () => {
       <div className={`auth-card ${mode === 'signup' ? 'show-signup' : ''}`}>
         <div className="auth-body">
           <section className="auth-copy">
-            <p className="eyebrow">Mock Netflix Experience</p>
-            <h1>Access TMDB powered catalogs in minutes.</h1>
+            <p className="eyebrow">NaDaflix 체험</p>
+            <h1>몇 분 만에 TMDB 기반 카탈로그에 접속하세요.</h1>
             <p className="supporting">
-              This academic-only authentication flow saves your TMDB key in LocalStorage
-              to make SPA development easier. In production you&apos;d never store keys
-              in the browser.
+              이 학습용 인증 흐름은 TMDB 키를 LocalStorage에 저장해 SPA 개발을 쉽게 만듭니다.
+              실제 서비스라면 브라우저에 키를 보관하지 않습니다.
             </p>
             <button className="mode-toggle" type="button" onClick={handleModeToggle}>
-              {mode === 'signin' ? 'Need an account? Sign up' : 'Already have access?'}
+              {mode === 'signin' ? '계정이 없나요? 가입하기' : '이미 계정이 있나요? 로그인하기'}
             </button>
           </section>
 
           <section className="auth-forms-wrapper">
             <form className="auth-form sign-in" onSubmit={handleSignIn}>
-              <h2>Sign in</h2>
-              <label htmlFor="signin-email">Email address</label>
+              <h2>로그인</h2>
+              <label htmlFor="signin-email">이메일</label>
               <input
                 id="signin-email"
                 name="email"
                 type="email"
                 autoComplete="email"
-                placeholder="you@email.com"
+                placeholder="student@school.ac.kr"
                 value={loginForm.email}
                 onChange={(event) =>
                   setLoginForm((prev) => ({ ...prev, email: event.target.value }))
                 }
               />
-              <label htmlFor="signin-password">TMDB API key</label>
+              <label htmlFor="signin-password">TMDB API 키</label>
               <input
                 id="signin-password"
                 name="password"
                 type="password"
-                placeholder="Paste your TMDB key"
+                placeholder="TMDB 키를 붙여넣으세요"
                 value={loginForm.password}
                 onChange={(event) =>
                   setLoginForm((prev) => ({ ...prev, password: event.target.value }))
@@ -199,41 +198,41 @@ const SignInPage = () => {
                       setLoginForm((prev) => ({ ...prev, remember: event.target.checked }))
                     }
                   />
-                  Remember my email
+                  이메일 기억하기
                 </label>
               </div>
               <button type="submit" disabled={isSubmitting}>
-                {isSubmitting && mode === 'signin' ? 'Checking...' : 'Enter app'}
+                {isSubmitting && mode === 'signin' ? '확인 중...' : '앱으로 이동'}
               </button>
             </form>
 
             <form className="auth-form sign-up" onSubmit={handleSignUp}>
-              <h2>Create an account</h2>
-              <label htmlFor="signup-email">Email address</label>
+              <h2>계정 만들기</h2>
+              <label htmlFor="signup-email">이메일</label>
               <input
                 id="signup-email"
                 type="email"
-                placeholder="student@example.com"
+                placeholder="student@school.ac.kr"
                 value={signupForm.email}
                 onChange={(event) =>
                   setSignupForm((prev) => ({ ...prev, email: event.target.value }))
                 }
               />
-              <label htmlFor="signup-password">TMDB API key</label>
+              <label htmlFor="signup-password">TMDB API 키</label>
               <input
                 id="signup-password"
                 type="password"
-                placeholder="TMDB API key"
+                placeholder="TMDB API 키"
                 value={signupForm.password}
                 onChange={(event) =>
                   setSignupForm((prev) => ({ ...prev, password: event.target.value }))
                 }
               />
-              <label htmlFor="signup-confirm">Confirm TMDB key</label>
+              <label htmlFor="signup-confirm">TMDB 키 확인</label>
               <input
                 id="signup-confirm"
                 type="password"
-                placeholder="Retype your TMDB key"
+                placeholder="TMDB 키를 다시 입력하세요"
                 value={signupForm.confirm}
                 onChange={(event) =>
                   setSignupForm((prev) => ({ ...prev, confirm: event.target.value }))
@@ -248,12 +247,11 @@ const SignInPage = () => {
                     setSignupForm((prev) => ({ ...prev, agree: event.target.checked }))
                   }
                 />
-                I understand this demo stores my TMDB key in LocalStorage for academic
-                purposes only.
+                이 데모가 학습 목적으로 TMDB 키를 LocalStorage에 저장한다는 사실에 동의합니다.
               </label>
 
               <button type="submit" disabled={isSubmitting}>
-                {isSubmitting && mode === 'signup' ? 'Creating...' : 'Register & return'}
+                {isSubmitting && mode === 'signup' ? '생성 중...' : '등록 후 돌아가기'}
               </button>
             </form>
           </section>

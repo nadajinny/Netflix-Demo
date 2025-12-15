@@ -51,7 +51,7 @@ const PopularPage = () => {
       if (!resolvedKey) {
         setMovies([])
         setHasMore(false)
-        setError('Add your TMDB API key on the sign-in page to load popular titles.')
+        setError('인기 작품을 불러오려면 로그인 페이지에서 TMDB API 키를 등록해주세요.')
         setLoading(false)
         return
       }
@@ -68,6 +68,7 @@ const PopularPage = () => {
         const useBearer = isV4Token(resolvedKey)
         const url = new URL(`${TMDB_BASE_URL}/movie/popular`)
         url.searchParams.set('page', String(targetPage))
+        url.searchParams.set('language', 'ko-KR')
 
         if (!useBearer) {
           url.searchParams.set('api_key', resolvedKey)
@@ -88,9 +89,9 @@ const PopularPage = () => {
 
         if (!response.ok) {
           if (response.status === 401) {
-            throw new Error('TMDB rejected the provided API key. Double-check it and try again.')
+            throw new Error('TMDB에서 제공된 API 키를 거부했습니다. 키를 다시 확인한 뒤 시도해주세요.')
           }
-          throw new Error('Unable to load popular movies from TMDB. Please try again shortly.')
+          throw new Error('TMDB 인기 영화를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
         }
 
         const payload = (await response.json()) as {
@@ -101,7 +102,7 @@ const PopularPage = () => {
 
         const normalized = (payload.results ?? []).map((movie) => ({
           ...movie,
-          title: movie.title || movie.name || 'Untitled',
+          title: movie.title || movie.name || '제목 미정',
         }))
 
         setMovies((current) => {
@@ -129,7 +130,7 @@ const PopularPage = () => {
         setError(
           fetchError instanceof Error
             ? fetchError.message
-            : 'Something went wrong while loading popular movies.',
+            : '인기 영화를 불러오는 중 문제가 발생했습니다.',
         )
       } finally {
         if (requestController.current === controller) {
@@ -156,7 +157,7 @@ const PopularPage = () => {
     setHasLoadedOnce(false)
 
     if (!resolvedKey) {
-      setError('Add your TMDB key via the sign-in page to unlock the popular catalog.')
+      setError('인기 카탈로그를 이용하려면 로그인 페이지에서 TMDB 키를 연동해주세요.')
       setLoading(false)
       return
     }
@@ -241,10 +242,11 @@ const PopularPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const viewHint = viewMode === 'table' ? 'Use pagination controls.' : 'Scroll to load more.'
+  const viewHint =
+    viewMode === 'table' ? '페이지 이동 버튼을 사용하세요.' : '스크롤로 더 많은 작품을 불러오세요.'
 
   const wishlistStatus =
-    wishlist.length === 0 ? 'Wishlist: empty' : `Wishlist: ${wishlist.length} saved`
+    wishlist.length === 0 ? '위시리스트: 비어 있음' : `위시리스트: ${wishlist.length}개 저장됨`
 
   const showEmptyState = hasLoadedOnce && !loading && !error && movies.length === 0
   const showStageOverlay = loading && (viewMode === 'table' || movies.length === 0)
@@ -252,26 +254,26 @@ const PopularPage = () => {
   return (
     <div className="page popular-page">
       <section className="page-hero">
-        <p className="eyebrow">Popular Collections</p>
-        <h1>Explore the TMDB popular feed with paginated and infinite experiences.</h1>
-        <p>Switch modes to browse however you like.</p>
+        <p className="eyebrow">인기 컬렉션</p>
+        <h1>TMDB 인기 피드를 페이지 매기기와 무한 스크롤로 탐색하세요.</h1>
+        <p>원하는 방식으로 모드를 전환하며 둘러볼 수 있습니다.</p>
       </section>
 
       <section className="popular-toolbar">
-        <div className="popular-view-toggle" role="group" aria-label="Select view mode">
+        <div className="popular-view-toggle" role="group" aria-label="보기 모드 선택">
           <button
             type="button"
             className={viewMode === 'table' ? 'is-active' : ''}
             onClick={() => handleModeChange('table')}
           >
-            Table View
+            표 형태
           </button>
           <button
             type="button"
             className={viewMode === 'infinite' ? 'is-active' : ''}
             onClick={() => handleModeChange('infinite')}
           >
-            Infinite Scroll
+            무한 스크롤
           </button>
         </div>
         <div className="popular-toolbar__status">
@@ -299,13 +301,13 @@ const PopularPage = () => {
         {showStageOverlay && (
           <div className="popular-overlay" aria-live="polite">
             <span className="loading-spinner" aria-hidden="true" />
-            <span>Loading TMDB data...</span>
+            <span>TMDB 데이터를 불러오는 중...</span>
           </div>
         )}
 
         {showEmptyState && (
           <p className="popular-feedback popular-feedback--empty">
-            No movies available yet. Make sure your TMDB key is linked and try again.
+            아직 표시할 영화가 없습니다. TMDB 키가 연동되어 있는지 확인한 뒤 다시 시도하세요.
           </p>
         )}
 
@@ -320,7 +322,7 @@ const PopularPage = () => {
                 fetchMovies(retryPage, append)
               }}
             >
-              Retry
+              다시 시도
             </button>
           </div>
         )}
@@ -333,16 +335,16 @@ const PopularPage = () => {
             onClick={() => handlePaginate('previous')}
             disabled={page === 1 || loading}
           >
-            Previous
+            이전
           </button>
-          <span className="popular-pagination__page">Page {page}</span>
+          <span className="popular-pagination__page">페이지 {page}</span>
           <button type="button" onClick={() => handlePaginate('next')} disabled={!hasMore || loading}>
-            Next
+            다음
           </button>
           {loading && (
             <span className="popular-pagination__loading">
               <span className="loading-spinner" aria-hidden="true" />
-              Loading page...
+              페이지 불러오는 중...
             </span>
           )}
         </div>
@@ -353,13 +355,11 @@ const PopularPage = () => {
           {loading && (
             <>
               <span className="loading-spinner" aria-hidden="true" />
-              <span>Loading more titles...</span>
+              <span>더 많은 작품을 불러오는 중...</span>
             </>
           )}
-          {!loading && hasMore && <span>Scroll for more TMDB titles - Page {page}</span>}
-          {!loading && !hasMore && movies.length > 0 && (
-            <span>You&apos;re at the end of this feed.</span>
-          )}
+          {!loading && hasMore && <span>TMDB 작품을 더 보려면 스크롤하세요 - 페이지 {page}</span>}
+          {!loading && !hasMore && movies.length > 0 && <span>이 피드의 끝까지 도달했습니다.</span>}
         </div>
       )}
 
@@ -369,7 +369,7 @@ const PopularPage = () => {
         onClick={handleBackToTop}
         aria-hidden={!showTopButton}
       >
-        Back to Top
+        맨 위로 이동
       </button>
     </div>
   )
