@@ -1,0 +1,16 @@
+<svg width="342" height="513" viewBox="0 0 342 513" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Poster placeholder">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f1b2c" />
+      <stop offset="100%" stop-color="#30233b" />
+    </linearGradient>
+  </defs>
+  <rect width="342" height="513" rx="24" fill="url(#grad)" />
+  <g fill="#ffffff" fill-opacity="0.55">
+    <path d="M88 352h166l-48-72-38 44-23-30z" />
+    <circle cx="115" cy="206" r="32" />
+  </g>
+  <text x="50%" y="450" font-size="24" text-anchor="middle" fill="#ffffff" fill-opacity="0.45" font-family="'Inter', 'Segoe UI', sans-serif">
+    No Poster
+  </text>
+</svg>
