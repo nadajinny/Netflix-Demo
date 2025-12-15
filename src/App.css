@@ -1681,6 +1681,14 @@ body.theme-light .popular-infinite-footer {
   color: rgba(28, 27, 42, 0.78);
 }
 
+body.theme-light .popular-toolbar__status {
+  color: rgba(28, 27, 42, 0.78);
+}
+
+body.theme-light .popular-toolbar__status span {
+  color: inherit;
+}
+
 body.theme-light .search-results__overlay {
   background: rgba(255, 255, 255, 0.92);
   color: inherit;
@@ -1705,6 +1713,11 @@ body.theme-light .popular-view-toggle button.is-active {
 body.theme-light .movie-detail {
   background: radial-gradient(circle at top, rgba(255, 255, 255, 0.8), #f9f9ff);
   border-color: rgba(15, 14, 28, 0.08);
+}
+
+body.theme-light .movie-detail__panel {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1.5rem;
 }
 
 body.theme-light .movie-detail::after {
@@ -1736,6 +1749,25 @@ body.theme-light .movie-detail__status {
 body.theme-light .movie-detail__status button {
   background: rgba(0, 0, 0, 0.08);
   color: inherit;
+}
+
+body.theme-light .detail-back-btn {
+  background: rgba(0, 0, 0, 0.08);
+  color: #111;
+}
+
+body.theme-light .detail-back-btn:hover,
+body.theme-light .detail-back-btn:focus-visible {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+body.theme-light .detail-wishlist {
+  color: #111;
+}
+
+body.theme-light .detail-wishlist.is-active {
+  color: #1c1b2a;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.08));
 }
 
 body.theme-light .loading-spinner {
