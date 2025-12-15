@@ -250,7 +250,7 @@ const SignInPage = () => {
               </label>
 
               <button type="submit" disabled={isSubmitting}>
-                {isSubmitting && mode === 'signup' ? '생성 중...' : '등록 후 돌아가기'}
+                {isSubmitting && mode === 'signup' ? '생성 중...' : '회원가입'}
               </button>
             </form>
           </section>

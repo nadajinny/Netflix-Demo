@@ -77,7 +77,8 @@
 
 .auth-forms-wrapper {
   position: relative;
-  min-height: 420px;
+  min-height: 520px;
+  padding-bottom: 1rem;
   overflow: hidden;
 }
 
