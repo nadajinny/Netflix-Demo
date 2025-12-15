@@ -38,30 +38,26 @@ const WishlistPage = () => {
       <section className="page-hero">
         <p className="eyebrow">Wishlist</p>
         <h1>All of your saved TMDB titles live here.</h1>
-        <p>
-          Every card below is sourced straight from <code>LocalStorage</code> without calling TMDB
-          again. Tap the star on a card to remove it and the change instantly syncs everywhere in the
-          app.
-        </p>
+        <p>Your list is stored locally and updates the moment you tap the star.</p>
       </section>
 
       <section className="wishlist-summary">
         <article>
           <header>Saved titles</header>
           <strong>{wishlistCount}</strong>
-          <p>{isEmpty ? 'Your wishlist is empty.' : 'Use the star to remove any title instantly.'}</p>
+          <p>{isEmpty ? 'Nothing saved yet.' : 'Tap the star to remove a title.'}</p>
         </article>
         <article>
           <header>Storage</header>
           <strong>LocalStorage</strong>
-          <p>Synced to the <code>movieWishlist</code> key and shared with every page.</p>
+          <p>Synced via the <code>movieWishlist</code> key.</p>
         </article>
       </section>
 
       {isEmpty ? (
         <div className="wishlist-empty">
-          <p>You have no movies in your wishlist yet.</p>
-          <p>Add favorites from any MovieCard or jump back into discovery below.</p>
+          <p>No movies saved yet.</p>
+          <p>Add favorites from any card or jump below.</p>
           <div className="wishlist-empty__actions">
             <Link className="wishlist-action" to="/">
               Browse Home

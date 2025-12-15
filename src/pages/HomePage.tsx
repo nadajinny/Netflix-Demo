@@ -57,19 +57,14 @@ const HomePage = () => {
     })
   }
 
-  const tmdbStatus = tmdbKey
-    ? 'Requests use your TMDB key straight from LocalStorage.'
-    : 'Link your TMDB key on the sign-in page to start fetching data.'
+  const tmdbStatus = tmdbKey ? 'Using stored TMDB key.' : 'Link a TMDB key to load data.'
 
   return (
     <div className="page home-page">
       <section className="page-hero home-hero">
         <p className="eyebrow">Your curated hub</p>
         <h1>Browse multiple TMDB collections without leaving this page.</h1>
-        <p>
-          Each section below issues its own TMDB request, renders a dedicated carousel, and keeps
-          wishlist interactions synced with LocalStorage for instant visual feedback.
-        </p>
+        <p>Each carousel pulls live data and stays synced with your wishlist.</p>
 
         <div className="home-status">
           <article>
@@ -80,7 +75,7 @@ const HomePage = () => {
           <article>
             <header>Wishlist</header>
             <strong>{wishlist.length} saved</strong>
-            <p>Use the star button on any card to toggle its wishlist state in-place.</p>
+            <p>Tap the ☆ on any card to toggle it.</p>
           </article>
         </div>
       </section>

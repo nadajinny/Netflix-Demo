@@ -131,22 +131,14 @@ const ProfilePage = () => {
   }
 
   const wishlistSummary =
-    wishlistCount === 0
-      ? 'Your movieWishlist key currently stores no saved titles.'
-      : `${wishlistCount} ${
-          wishlistCount === 1 ? 'movie' : 'movies'
-        } are persisted inside the movieWishlist key.`
+    wishlistCount === 0 ? 'movieWishlist is empty.' : `${wishlistCount} saved in movieWishlist.`
 
   return (
     <div className="page profile-page">
       <section className="page-hero profile-intro">
         <p className="eyebrow">Profile & Settings</p>
         <h1>Personalize your MockFlix experience using only LocalStorage.</h1>
-        <p>
-          Everything below is sourced from LocalStorage keys such as <code>isLogin</code>,{' '}
-          <code>rememberId</code>, <code>movieWishlist</code>, and <code>theme</code> to show how a
-          frontend SPA can manage auth status and preferences without a backend.
-        </p>
+        <p>Your auth state, theme, and wishlist all live in LocalStorage.</p>
       </section>
 
       <section className="profile-overview">
@@ -161,7 +153,7 @@ const ProfilePage = () => {
             </h2>
             <p className="profile-session">
               <span className={`status-dot ${loginState ? 'online' : 'offline'}`} aria-hidden="true" />
-              {loginState ? 'Authenticated session detected via isLogin=true' : 'Session ended'}
+              {loginState ? 'Session active' : 'Session ended'}
             </p>
           </div>
         </article>
@@ -212,8 +204,7 @@ const ProfilePage = () => {
           </header>
           <div className="stat-value">{rememberedEmail || 'Not stored'}</div>
           <p>
-            The <code>rememberId</code> key keeps an optional email value so the sign-in form can
-            auto-fill.
+            Stored under <code>rememberId</code> for quick sign-ins.
           </p>
         </article>
       </section>
@@ -224,7 +215,7 @@ const ProfilePage = () => {
             <p className="profile-label">Theme preference</p>
             <h3>Dark vs Light</h3>
           </header>
-          <p>Toggle the UI theme and we&apos;ll persist the choice to the <code>theme</code> key.</p>
+          <p>Saved to the <code>theme</code> key.</p>
           <div className="theme-toggle" role="group" aria-label="Theme toggle">
             <button
               type="button"
@@ -251,10 +242,7 @@ const ProfilePage = () => {
             <p className="profile-label">Logout</p>
             <h3>End this session</h3>
           </header>
-          <p>
-            Logging out clears the <code>isLogin</code> state and removes your <code>TMDb-Key</code>,
-            but it leaves wishlist data untouched for later visits.
-          </p>
+          <p>Clears <code>isLogin</code> and <code>TMDb-Key</code>.</p>
           <button type="button" className="logout-button" onClick={handleLogout}>
             Log out
           </button>
