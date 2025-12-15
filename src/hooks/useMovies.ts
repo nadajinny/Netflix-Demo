@@ -82,7 +82,7 @@ export const useMovies = (endpoint: string, options?: UseMoviesOptions): UseMovi
           if (response.status === 401) {
             throw new Error('TMDB에서 제공된 API 키를 거부했습니다. 키를 다시 확인한 뒤 시도해주세요.')
           }
-          throw new Error('TMDB에서 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+          throw new Error('영화 데이터를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
         }
 
         const payload = (await response.json()) as { results?: Movie[] }

@@ -18,7 +18,7 @@ const FALLBACK_POSTER = '/poster-fallback.svg'
  */
 const getOverviewSnippet = (overview?: string) => {
   if (!overview || !overview.trim()) {
-    return 'TMDB에서 아직 이 작품에 대한 소개를 제공하지 않았습니다.'
+    return '아직 이 작품에 대한 소개가 제공되지 않았습니다.'
   }
   const trimmed = overview.trim()
   return trimmed.length > 140 ? `${trimmed.slice(0, 137)}...` : trimmed

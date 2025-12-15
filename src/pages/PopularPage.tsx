@@ -91,7 +91,7 @@ const PopularPage = () => {
           if (response.status === 401) {
             throw new Error('TMDB에서 제공된 API 키를 거부했습니다. 키를 다시 확인한 뒤 시도해주세요.')
           }
-          throw new Error('TMDB 인기 영화를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
+          throw new Error('인기 영화를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
         }
 
         const payload = (await response.json()) as {
@@ -255,7 +255,7 @@ const PopularPage = () => {
     <div className="page popular-page">
       <section className="page-hero">
         <p className="eyebrow">인기 컬렉션</p>
-        <h1>TMDB 인기 피드를 페이지 매기기와 무한 스크롤로 탐색하세요.</h1>
+        <h1>인기 피드를 페이지 매기기와 무한 스크롤로 탐색하세요.</h1>
         <p>원하는 방식으로 모드를 전환하며 둘러볼 수 있습니다.</p>
       </section>
 
@@ -301,7 +301,7 @@ const PopularPage = () => {
         {showStageOverlay && (
           <div className="popular-overlay" aria-live="polite">
             <span className="loading-spinner" aria-hidden="true" />
-            <span>TMDB 데이터를 불러오는 중...</span>
+            <span>데이터를 불러오는 중...</span>
           </div>
         )}
 
@@ -358,7 +358,7 @@ const PopularPage = () => {
               <span>더 많은 작품을 불러오는 중...</span>
             </>
           )}
-          {!loading && hasMore && <span>TMDB 작품을 더 보려면 스크롤하세요 - 페이지 {page}</span>}
+          {!loading && hasMore && <span>더 많은 작품을 보려면 스크롤하세요 - 페이지 {page}</span>}
           {!loading && !hasMore && movies.length > 0 && <span>이 피드의 끝까지 도달했습니다.</span>}
         </div>
       )}

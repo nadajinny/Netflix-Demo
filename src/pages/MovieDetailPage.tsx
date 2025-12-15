@@ -111,7 +111,7 @@ const MovieDetailPage = () => {
           throw new Error('TMDB에서 제공된 API 키를 거부했습니다. 키를 다시 확인한 뒤 시도해주세요.')
         }
         if (response.status === 404) {
-          throw new Error('해당 TMDB ID로 영화 정보를 찾을 수 없습니다.')
+          throw new Error('해당 ID의 영화 정보를 찾을 수 없습니다.')
         }
         throw new Error('지금은 이 영화를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
       }
@@ -130,7 +130,7 @@ const MovieDetailPage = () => {
       setError(
         fetchError instanceof Error
           ? fetchError.message
-          : '이 TMDB 작품을 불러오는 중 문제가 발생했습니다.',
+          : '이 작품을 불러오는 중 문제가 발생했습니다.',
       )
     } finally {
       if (abortRef.current === controller) {

@@ -132,15 +132,15 @@ const ProfilePage = () => {
 
   const wishlistSummary =
     wishlistCount === 0
-      ? 'movieWishlist가 비어 있습니다.'
-      : `movieWishlist에 ${wishlistCount}개가 저장되어 있습니다.`
+      ? '아직 위시리스트가 비어 있습니다.'
+      : `위시리스트에 ${wishlistCount}개가 저장되어 있습니다.`
 
   return (
     <div className="page profile-page">
       <section className="page-hero profile-intro">
         <p className="eyebrow">프로필 & 설정</p>
-        <h1>로컬스토리지로 NaDaflix 경험을 원하는 대로 구성하세요.</h1>
-        <p>인증 상태, 테마, 위시리스트가 모두 LocalStorage에 저장됩니다.</p>
+        <h1>한눈에 계정과 기기 설정을 확인하세요.</h1>
+        <p>로그인 상태, 테마, 위시리스트 정보를 편하게 관리할 수 있습니다.</p>
       </section>
 
       <section className="profile-overview">
@@ -162,25 +162,25 @@ const ProfilePage = () => {
 
         <article className="profile-card profile-storage-card">
           <header>
-            <p className="profile-label">LocalStorage 스냅샷</p>
-            <h3>주요 키 상태</h3>
+            <p className="profile-label">기기 정보</p>
+            <h3>저장 상태</h3>
           </header>
           <ul>
             <li>
-              <span>isLogin</span>
-              <strong>{loginState ? 'true' : 'false'}</strong>
+              <span>로그인 유지</span>
+              <strong>{loginState ? 'ON' : 'OFF'}</strong>
             </li>
             <li>
-              <span>rememberId</span>
-              <strong>{rememberedEmail || '비어 있음'}</strong>
+              <span>저장된 이메일</span>
+              <strong>{rememberedEmail || '없음'}</strong>
             </li>
             <li>
-              <span>movieWishlist</span>
+              <span>위시리스트</span>
               <strong>{wishlistCount}</strong>
             </li>
             <li>
-              <span>theme</span>
-              <strong>{theme}</strong>
+              <span>현재 테마</span>
+              <strong>{theme === 'dark' ? '다크' : '라이트'}</strong>
             </li>
           </ul>
         </article>
@@ -205,9 +205,7 @@ const ProfilePage = () => {
             <h3>저장된 이메일</h3>
           </header>
           <div className="stat-value">{rememberedEmail || '저장되지 않음'}</div>
-          <p>
-            빠른 로그인을 위해 <code>rememberId</code> 키에 보관됩니다.
-          </p>
+          <p>빠른 로그인을 위해 이 기기에 저장됩니다.</p>
         </article>
       </section>
 
@@ -217,9 +215,7 @@ const ProfilePage = () => {
             <p className="profile-label">테마 설정</p>
             <h3>다크 vs 라이트</h3>
           </header>
-          <p>
-            <code>theme</code> 키에 저장됩니다.
-          </p>
+          <p>선택한 모드는 이 기기에 저장돼요.</p>
           <div className="theme-toggle" role="group" aria-label="테마 전환">
             <button
               type="button"
@@ -246,9 +242,7 @@ const ProfilePage = () => {
             <p className="profile-label">로그아웃</p>
             <h3>이 세션 종료</h3>
           </header>
-          <p>
-            <code>isLogin</code>과 <code>TMDb-Key</code> 값을 정리합니다.
-          </p>
+          <p>저장된 로그인 정보와 TMDB 키가 삭제됩니다.</p>
           <button type="button" className="logout-button" onClick={handleLogout}>
             로그아웃
           </button>

@@ -104,8 +104,8 @@ const applyFilterPipeline = (source: Movie[], filters: Filters) => {
 const isV4Token = (key: string) => key.trim().startsWith('eyJ')
 
 /**
- * The Search page allows users to filter and sort movie data dynamically using TMDB API parameters
- * and client-side data processing. This demonstrates interactive data handling and state-driven UI
+ * The Search page allows users to filter and sort movie data dynamically using API parameters and
+ * client-side data processing. This demonstrates interactive data handling and state-driven UI
  * updates in a SPA.
  */
 const SearchPage = () => {
@@ -229,7 +229,7 @@ const SearchPage = () => {
           if (response.status === 401) {
             throw new Error('TMDB에서 제공된 API 키를 거부했습니다. 키를 다시 확인한 뒤 시도해주세요.')
           }
-          throw new Error('지금은 TMDB 검색 결과를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
+          throw new Error('지금은 검색 결과를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.')
         }
 
         const payload = (await response.json()) as { results?: Movie[] }
@@ -247,7 +247,7 @@ const SearchPage = () => {
         setError(
           fetchError instanceof Error
             ? fetchError.message
-            : 'TMDB를 검색하는 중 문제가 발생했습니다.',
+            : '영화를 검색하는 중 문제가 발생했습니다.',
         )
       } finally {
         if (requestController.current === controller) {
@@ -262,7 +262,7 @@ const SearchPage = () => {
   useEffect(() => {
     if (!resolvedKey) {
       setMovies([])
-      setError('TMDB를 검색하려면 로그인 페이지에서 TMDB 키를 연동해주세요.')
+      setError('검색 기능을 사용하려면 로그인 페이지에서 TMDB 키를 연동해주세요.')
       setLoading(false)
       firstLoadRef.current = true
       return
@@ -314,8 +314,8 @@ const SearchPage = () => {
   return (
     <div className="page search-page">
       <section className="page-hero">
-        <p className="eyebrow">TMDB 검색</p>
-        <h1>브라우저에서 바로 TMDB 작품을 검색, 정렬, 저장하세요.</h1>
+        <p className="eyebrow">콘텐츠 검색</p>
+        <h1>브라우저에서 바로 작품을 검색하고 정렬해 보세요.</h1>
         <p>키워드를 입력하거나 필터를 사용해 실시간으로 결과를 좁혀보세요.</p>
       </section>
 
@@ -448,9 +448,9 @@ const SearchPage = () => {
         </div>
 
         {loading && (
-          <div className="search-results__overlay" aria-label="TMDB 검색 결과 불러오는 중">
+          <div className="search-results__overlay" aria-label="검색 결과 불러오는 중">
             <span className="loading-spinner" aria-hidden="true" />
-            <span>TMDB 데이터를 불러오는 중...</span>
+            <span>데이터를 불러오는 중...</span>
           </div>
         )}
       </div>

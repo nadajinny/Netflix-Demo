@@ -121,7 +121,7 @@ const SignInPage = () => {
     }
 
     if (!signupForm.agree) {
-      showStatus('error', '학습용 사용 조건에 동의해야 합니다.')
+      showStatus('error', '서비스 약관에 동의해야 합니다.')
       setIsSubmitting(false)
       return
     }
@@ -152,11 +152,10 @@ const SignInPage = () => {
       <div className={`auth-card ${mode === 'signup' ? 'show-signup' : ''}`}>
         <div className="auth-body">
           <section className="auth-copy">
-            <p className="eyebrow">NaDaflix 체험</p>
-            <h1>몇 분 만에 TMDB 기반 카탈로그에 접속하세요.</h1>
+            <p className="eyebrow">NaDaflix에 오신 것을 환영합니다</p>
+            <h1>이메일과 TMDB 키만으로 바로 즐겨보세요.</h1>
             <p className="supporting">
-              이 학습용 인증 흐름은 TMDB 키를 LocalStorage에 저장해 SPA 개발을 쉽게 만듭니다.
-              실제 서비스라면 브라우저에 키를 보관하지 않습니다.
+              등록한 TMDB 키는 이 기기에 안전하게 보관되며 언제든지 변경하거나 삭제할 수 있습니다.
             </p>
             <button className="mode-toggle" type="button" onClick={handleModeToggle}>
               {mode === 'signin' ? '계정이 없나요? 가입하기' : '이미 계정이 있나요? 로그인하기'}
@@ -247,7 +246,7 @@ const SignInPage = () => {
                     setSignupForm((prev) => ({ ...prev, agree: event.target.checked }))
                   }
                 />
-                이 데모가 학습 목적으로 TMDB 키를 LocalStorage에 저장한다는 사실에 동의합니다.
+                이 기기에 입력한 TMDB 키가 저장되는 것에 동의합니다.
               </label>
 
               <button type="submit" disabled={isSubmitting}>

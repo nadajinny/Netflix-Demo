@@ -28,7 +28,7 @@ const AppLayout = () => {
       <header className="app-header">
         <div className="branding">
           <span className="brand-mark">NaDaflix</span>
-          <span className="brand-subtitle">TMDB 데모 포털</span>
+          <span className="brand-subtitle">취향 맞춤 영화 허브</span>
         </div>
 
         <nav className="main-nav">

@@ -5,8 +5,8 @@ import { useMovies } from '../hooks/useMovies'
 import { useWishlist } from '../hooks/useWishlist'
 
 /**
- * The Home page dynamically fetches multiple movie categories from the TMDB API and renders them as
- * independent sections. User interactions such as hover animations and wishlist toggling are
+ * The Home page dynamically fetches multiple movie categories from the movie API and renders them
+ * as independent sections. User interactions such as hover animations and wishlist toggling are
  * implemented using client-side state and LocalStorage synchronization.
  */
 
@@ -65,7 +65,7 @@ const HomePage = () => {
     <div className="page home-page">
       <section className="page-hero home-hero">
         <p className="eyebrow">당신만을 위한 허브</p>
-        <h1>이 페이지에서 여러 TMDB 컬렉션을 한 번에 둘러보세요.</h1>
+        <h1>이 페이지에서 여러 영화 컬렉션을 한 번에 둘러보세요.</h1>
         <p>각 캐러셀은 실시간 데이터를 불러오고 위시리스트와 자동으로 동기화됩니다.</p>
 
         <div className="home-status">
