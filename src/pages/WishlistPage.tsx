@@ -40,7 +40,8 @@ const WishlistPage = () => {
         <h1>All of your saved TMDB titles live here.</h1>
         <p>
           Every card below is sourced straight from <code>LocalStorage</code> without calling TMDB
-          again. Tap a card to remove it and the change instantly syncs everywhere in the app.
+          again. Tap the star on a card to remove it and the change instantly syncs everywhere in the
+          app.
         </p>
       </section>
 
@@ -48,7 +49,7 @@ const WishlistPage = () => {
         <article>
           <header>Saved titles</header>
           <strong>{wishlistCount}</strong>
-          <p>{isEmpty ? 'Your wishlist is empty.' : 'Tap any card to remove it instantly.'}</p>
+          <p>{isEmpty ? 'Your wishlist is empty.' : 'Use the star to remove any title instantly.'}</p>
         </article>
         <article>
           <header>Storage</header>

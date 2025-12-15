@@ -248,7 +248,7 @@ const PopularPage = () => {
 
   const wishlistStatus =
     wishlist.length === 0
-      ? 'Wishlist is empty. Tap any movie card to save it for later.'
+      ? 'Wishlist is empty. Use the star on any movie card to save it for later.'
       : `${wishlist.length} saved in wishlist - synced with LocalStorage`
 
   const showEmptyState = hasLoadedOnce && !loading && !error && movies.length === 0
