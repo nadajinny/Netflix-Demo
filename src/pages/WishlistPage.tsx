@@ -1,15 +1,14 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import MovieCard from '../components/MovieCard'
 import type { Movie } from '../hooks/useMovies'
 import { useWishlist } from '../hooks/useWishlist'
+import { useAuth } from '../context/AuthContext'
+import { getStoredTmdbKey } from '../utils/auth'
 
-const createMovieFromWishlist = (entry: { id: number; title: string; poster_path: string | null }): Movie => ({
-  id: entry.id,
-  title: entry.title,
-  overview: '탐색 중 저장된 항목입니다.',
-  poster_path: entry.poster_path,
-})
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3'
+
+const isV4Token = (key: string) => key.trim().startsWith('eyJ')
 
 /**
  * The Wishlist page retrieves all movie data exclusively from LocalStorage and does not perform any
@@ -17,7 +16,12 @@ const createMovieFromWishlist = (entry: { id: number; title: string; poster_path
  */
 const WishlistPage = () => {
   const { wishlist, toggleWishlist } = useWishlist()
-  const wishlistMovies = useMemo(() => wishlist.map((entry) => createMovieFromWishlist(entry)), [wishlist])
+  const { tmdbKey: contextKey } = useAuth()
+  const resolvedKey = useMemo(() => (contextKey || getStoredTmdbKey()).trim(), [contextKey])
+  const [movies, setMovies] = useState<Movie[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const requestRef = useRef<AbortController | null>(null)
 
   const handleRemove = useCallback(
     (movie: Movie) => {
@@ -30,8 +34,118 @@ const WishlistPage = () => {
     [toggleWishlist],
   )
 
-  const wishlistCount = wishlistMovies.length
+  const wishlistCount = wishlist.length
   const isEmpty = wishlistCount === 0
+
+  useEffect(() => {
+    requestRef.current?.abort()
+
+    if (isEmpty) {
+      setMovies([])
+      setLoading(false)
+      setError(null)
+      return
+    }
+
+    if (!resolvedKey) {
+      setMovies([])
+      setLoading(false)
+      setError('위시리스트를 불러오려면 로그인 페이지에서 TMDB 키를 등록해주세요.')
+      return
+    }
+
+    const controller = new AbortController()
+    requestRef.current = controller
+    setLoading(true)
+    setError(null)
+
+    const useBearer = isV4Token(resolvedKey)
+    const headers: HeadersInit = useBearer
+      ? {
+          Accept: 'application/json',
+          Authorization: `Bearer ${resolvedKey}`,
+        }
+      : {
+          Accept: 'application/json',
+        }
+
+    const fetchWishlistDetails = async () => {
+      try {
+        const detailed = await Promise.all(
+          wishlist.map(async (entry) => {
+            try {
+              const url = new URL(`${TMDB_BASE_URL}/movie/${entry.id}`)
+              url.searchParams.set('language', 'ko-KR')
+              if (!useBearer) {
+                url.searchParams.set('api_key', resolvedKey)
+              }
+
+              const response = await fetch(url.toString(), {
+                headers,
+                signal: controller.signal,
+              })
+
+              if (!response.ok) {
+                throw new Error('failed')
+              }
+
+              const payload = (await response.json()) as (Partial<Movie> & { id: number }) | null
+              if (!payload) {
+                throw new Error('missing payload')
+              }
+
+              const normalized: Movie = {
+                id: payload.id,
+                title: payload.title || payload.name || entry.title,
+                overview: payload.overview?.trim() || '설명이 준비되어 있지 않습니다.',
+                poster_path: payload.poster_path ?? entry.poster_path ?? null,
+                backdrop_path: payload.backdrop_path ?? null,
+                release_date: payload.release_date,
+                vote_average: payload.vote_average,
+                popularity: payload.popularity,
+                vote_count: payload.vote_count,
+              }
+
+              return normalized
+            } catch (itemError) {
+              if (controller.signal.aborted) return null
+
+              return {
+                id: entry.id,
+                title: entry.title,
+                overview: '이 작품 정보를 불러오지 못했습니다.',
+                poster_path: entry.poster_path ?? null,
+              } as Movie
+            }
+          }),
+        )
+
+        if (!controller.signal.aborted) {
+          setMovies(detailed.filter(Boolean) as Movie[])
+        }
+      } catch (listError) {
+        if (controller.signal.aborted) return
+
+        setError('위시리스트를 불러오는 중 문제가 발생했습니다.')
+        setMovies(
+          wishlist.map((entry) => ({
+            id: entry.id,
+            title: entry.title,
+            overview: '이 작품 정보를 불러오지 못했습니다.',
+            poster_path: entry.poster_path ?? null,
+          })),
+        )
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
+      }
+    }
+
+    fetchWishlistDetails()
+
+    return () => controller.abort()
+  }, [isEmpty, resolvedKey, wishlist])
 
   return (
     <div className="page wishlist-page">
@@ -68,11 +182,34 @@ const WishlistPage = () => {
           </div>
         </div>
       ) : (
-        <div className="wishlist-grid" aria-live="polite">
-          {wishlistMovies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} wished onToggleWishlist={handleRemove} />
-          ))}
-        </div>
+        <>
+          {error && (
+            <div className="section-feedback section-feedback--error" role="alert">
+              {error}
+            </div>
+          )}
+
+          {loading && (
+            <div className="section-feedback section-feedback--loading" role="status">
+              <span className="loading-spinner" aria-hidden="true" />
+              <span>위시리스트를 불러오는 중...</span>
+            </div>
+          )}
+
+          {!loading && movies.length === 0 && !error && (
+            <div className="section-feedback section-feedback--empty" role="status">
+              표시할 영화 정보를 찾을 수 없습니다.
+            </div>
+          )}
+
+          {movies.length > 0 && (
+            <div className="wishlist-grid" aria-live="polite">
+              {movies.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} wished onToggleWishlist={handleRemove} />
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   )

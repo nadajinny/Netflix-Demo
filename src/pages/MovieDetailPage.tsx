@@ -88,6 +88,7 @@ const MovieDetailPage = () => {
     try {
       const useBearer = resolvedKey.startsWith('eyJ')
       const url = new URL(`${TMDB_BASE_URL}/movie/${id}`)
+      url.searchParams.set('language', 'ko-KR')
 
       if (!useBearer) {
         url.searchParams.set('api_key', resolvedKey)
