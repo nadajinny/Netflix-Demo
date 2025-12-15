@@ -1690,6 +1690,18 @@ body.theme-light .search-panel__actions .ghost-btn {
   border-color: rgba(28, 27, 42, 0.25);
 }
 
+body.theme-light .popular-view-toggle button {
+  background: linear-gradient(120deg, #ff1f5a, #ff8043);
+  border-color: transparent;
+  color: #fff;
+  opacity: 0.6;
+}
+
+body.theme-light .popular-view-toggle button.is-active {
+  opacity: 1;
+  box-shadow: 0 12px 24px rgba(255, 64, 89, 0.35);
+}
+
 body.theme-light .movie-detail {
   background: radial-gradient(circle at top, rgba(255, 255, 255, 0.8), #f9f9ff);
   border-color: rgba(15, 14, 28, 0.08);
@@ -1729,16 +1741,6 @@ body.theme-light .movie-detail__status button {
 body.theme-light .loading-spinner {
   border-color: rgba(28, 27, 42, 0.2);
   border-top-color: #ff5f7a;
-}
-
-body.theme-light .popular-view-toggle button {
-  border-color: rgba(28, 27, 42, 0.12);
-  background: rgba(28, 27, 42, 0.05);
-  color: inherit;
-}
-
-body.theme-light .popular-view-toggle button.is-active {
-  color: #fff;
 }
 
 body.theme-light .search-status {

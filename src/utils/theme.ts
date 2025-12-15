@@ -7,7 +7,10 @@ const canUseStorage = () => typeof window !== 'undefined' && !!window.localStora
 export const getStoredTheme = (): ThemePreference => {
   if (!canUseStorage()) return 'dark'
   const stored = window.localStorage.getItem(THEME_STORAGE_KEY)
-  return stored === 'light' ? 'light' : 'dark'
+  if (stored === 'light') return 'light'
+  if (stored === 'dark') return 'dark'
+  window.localStorage.setItem(THEME_STORAGE_KEY, 'dark')
+  return 'dark'
 }
 
 export const saveThemePreference = (theme: ThemePreference) => {
