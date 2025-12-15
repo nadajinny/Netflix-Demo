@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -23,6 +23,9 @@ const SignInPage = () => {
   const [mode, setMode] = useState<AuthMode>('signin')
   const [status, setStatus] = useState<StatusState>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const signInFormRef = useRef<HTMLFormElement>(null)
+  const signUpFormRef = useRef<HTMLFormElement>(null)
+  const [formHeight, setFormHeight] = useState(520)
   const [loginForm, setLoginForm] = useState({
     email: rememberedId,
     password: '',
@@ -146,6 +149,20 @@ const SignInPage = () => {
     setIsSubmitting(false)
   }
 
+  useEffect(() => {
+    const updateWrapperHeight = () => {
+      const activeForm = mode === 'signin' ? signInFormRef.current : signUpFormRef.current
+      if (activeForm) {
+        setFormHeight(activeForm.offsetHeight)
+      }
+    }
+
+    updateWrapperHeight()
+
+    window.addEventListener('resize', updateWrapperHeight)
+    return () => window.removeEventListener('resize', updateWrapperHeight)
+  }, [mode])
+
   return (
     <div className="signin-page">
       <div className="gradient-bg" />
@@ -162,8 +179,13 @@ const SignInPage = () => {
             </button>
           </section>
 
-          <section className="auth-forms-wrapper">
-            <form className="auth-form sign-in" onSubmit={handleSignIn}>
+          <section className="auth-forms-wrapper" style={{ height: `${formHeight}px` }}>
+            <form
+              ref={signInFormRef}
+              className="auth-form sign-in"
+              onSubmit={handleSignIn}
+              aria-hidden={mode !== 'signin'}
+            >
               <h2>로그인</h2>
               <label htmlFor="signin-email">이메일</label>
               <input
@@ -205,7 +227,12 @@ const SignInPage = () => {
               </button>
             </form>
 
-            <form className="auth-form sign-up" onSubmit={handleSignUp}>
+            <form
+              ref={signUpFormRef}
+              className="auth-form sign-up"
+              onSubmit={handleSignUp}
+              aria-hidden={mode !== 'signup'}
+            >
               <h2>계정 만들기</h2>
               <label htmlFor="signup-email">이메일</label>
               <input

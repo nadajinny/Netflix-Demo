@@ -80,6 +80,7 @@
   min-height: 520px;
   padding-bottom: 1rem;
   overflow: hidden;
+  transition: height 0.55s ease;
 }
 
 .auth-form {
@@ -98,6 +99,7 @@
   transition: transform 0.55s ease, opacity 0.55s ease;
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
 }
 
 .auth-form h2 {
@@ -156,6 +158,11 @@
 .auth-card.show-signup .sign-up {
   transform: translateX(0);
   opacity: 1;
+}
+
+.auth-card:not(.show-signup) .sign-in,
+.auth-card.show-signup .sign-up {
+  pointer-events: auto;
 }
 
 .checkbox-field {
@@ -221,12 +228,6 @@
   .auth-body {
     grid-template-columns: 1fr;
     padding: 2rem;
-  }
-
-  .auth-form {
-    position: relative;
-    transform: none !important;
-    opacity: 1 !important;
   }
 
   .auth-card,
