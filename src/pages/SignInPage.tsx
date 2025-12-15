@@ -246,10 +246,13 @@ const SignInPage = () => {
                     setSignupForm((prev) => ({ ...prev, agree: event.target.checked }))
                   }
                 />
-                이 기기에 입력한 TMDB 키가 저장되는 것에 동의합니다.
+                <span>
+                  <strong>약관 동의</strong> — 이 기기에 입력한 TMDB 키가 저장되며 나중에 언제든 삭제할 수
+                  있다는 사실을 확인했습니다.
+                </span>
               </label>
 
-              <button type="submit" disabled={isSubmitting}>
+              <button type="submit" disabled={isSubmitting || !signupForm.agree}>
                 {isSubmitting && mode === 'signup' ? '생성 중...' : '회원가입'}
               </button>
             </form>
