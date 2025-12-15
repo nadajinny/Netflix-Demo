@@ -167,8 +167,7 @@ const MovieDetailPage = () => {
     : undefined
   const formattedRelease = formatReleaseDate(movie?.release_date)
   const runtimeLabel = formatRuntime(movie?.runtime)
-  const overviewText =
-    movie?.overview?.trim() || 'TMDB has not provided an overview for this title yet.'
+  const overviewText = movie?.overview?.trim() || 'No overview available.'
   const ratingLabel =
     typeof movie?.vote_average === 'number' ? movie.vote_average.toFixed(1) : 'NR'
 
@@ -197,7 +196,7 @@ const MovieDetailPage = () => {
           {loading ? (
             <div className="movie-detail__status" role="status">
               <span className="loading-spinner" aria-hidden="true" />
-              <p>Fetching TMDB insights...</p>
+              <p>Loading details...</p>
             </div>
           ) : error ? (
             <div className="movie-detail__status movie-detail__status--error" role="alert">
@@ -245,7 +244,7 @@ const MovieDetailPage = () => {
                       ))
                     ) : (
                       <span className="movie-detail__genre movie-detail__genre--placeholder">
-                        Genres coming soon
+                        No genres listed
                       </span>
                     )}
                   </div>

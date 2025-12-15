@@ -306,10 +306,7 @@ const SearchPage = () => {
     setFiltersExpanded((current) => !current)
   }
 
-  const wishlistStatus =
-    wishlist.length === 0
-      ? 'Wishlist synced to LocalStorage (movieWishlist) - empty for now.'
-      : `${wishlist.length} in wishlist • changes sync instantly`
+  const wishlistStatus = wishlist.length === 0 ? 'Wishlist: empty' : `Wishlist: ${wishlist.length}`
 
   const showEmptyState = hasFetched && !loading && !error && movies.length === 0
 
@@ -318,11 +315,7 @@ const SearchPage = () => {
       <section className="page-hero">
         <p className="eyebrow">Search TMDB</p>
         <h1>Filter, sort, and wishlist TMDB titles without leaving the browser.</h1>
-        <p>
-          Type a keyword or use the discovery filters below. Every control updates the results in
-          real-time using the TMDB <code>search</code> and <code>discover</code> endpoints plus
-          client-side refinement.
-        </p>
+        <p>Type a keyword or use filters to refine the feed in real time.</p>
       </section>
 
       <form className="search-panel" onSubmit={handleSubmit}>
@@ -343,9 +336,7 @@ const SearchPage = () => {
         </div>
 
         <div className="search-panel__toggle-row">
-          <span className="search-panel__hint">
-            Filters {filters.query.trim() ? 'refine this search' : 'update the discovery feed'} automatically.
-          </span>
+          <span className="search-panel__hint">Filters update automatically.</span>
           <button type="button" className="search-panel__toggle" onClick={handleToggleFilters}>
             {filtersExpanded ? 'Hide Filters' : 'Show Filters'}
           </button>
@@ -435,10 +426,10 @@ const SearchPage = () => {
 
       <section className="search-status" aria-live="polite">
         <span className={`status-pill ${appliedFilterCount > 0 ? 'is-active' : ''}`}>
-          Active filters: {appliedFilterCount}
+          Filters: {appliedFilterCount}
         </span>
         <span className="status-pill">
-          {loading ? 'Loading TMDB data...' : `Showing ${movies.length} titles`}
+          {loading ? 'Loading...' : `Results: ${movies.length}`}
         </span>
         <span className="status-pill">{wishlistStatus}</span>
       </section>
@@ -473,7 +464,7 @@ const SearchPage = () => {
       )}
 
       {showEmptyState && (
-        <p className="search-feedback search-feedback--empty">No movies match your search criteria.</p>
+        <p className="search-feedback search-feedback--empty">No movies match right now.</p>
       )}
     </div>
   )

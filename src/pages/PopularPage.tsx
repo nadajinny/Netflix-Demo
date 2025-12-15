@@ -241,15 +241,10 @@ const PopularPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const viewHint =
-    viewMode === 'table'
-      ? 'Cards stay locked inside this grid. Use pagination to load the next TMDB page.'
-      : 'Scroll down and the next TMDB page will load automatically with a smooth append.'
+  const viewHint = viewMode === 'table' ? 'Use pagination controls.' : 'Scroll to load more.'
 
   const wishlistStatus =
-    wishlist.length === 0
-      ? 'Wishlist is empty. Use the star on any movie card to save it for later.'
-      : `${wishlist.length} saved in wishlist - synced with LocalStorage`
+    wishlist.length === 0 ? 'Wishlist: empty' : `Wishlist: ${wishlist.length} saved`
 
   const showEmptyState = hasLoadedOnce && !loading && !error && movies.length === 0
   const showStageOverlay = loading && (viewMode === 'table' || movies.length === 0)
@@ -259,10 +254,7 @@ const PopularPage = () => {
       <section className="page-hero">
         <p className="eyebrow">Popular Collections</p>
         <h1>Explore the TMDB popular feed with paginated and infinite experiences.</h1>
-        <p>
-          Each mode shares the same dataset and wishlist-aware cards. Table view demonstrates locked
-          grids with pagination, whereas infinite scrolling streams more pages as you reach the end.
-        </p>
+        <p>Switch modes to browse however you like.</p>
       </section>
 
       <section className="popular-toolbar">
@@ -366,7 +358,7 @@ const PopularPage = () => {
           )}
           {!loading && hasMore && <span>Scroll for more TMDB titles - Page {page}</span>}
           {!loading && !hasMore && movies.length > 0 && (
-            <span>You have reached the end of TMDB&apos;s popular feed.</span>
+            <span>You&apos;re at the end of this feed.</span>
           )}
         </div>
       )}
