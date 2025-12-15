@@ -191,6 +191,9 @@ const MovieDetailPage = () => {
     <div className="page movie-detail-page">
       <div className="movie-detail" style={backdropStyle}>
         <div className="movie-detail__panel">
+          <button type="button" className="detail-back-btn" onClick={handleBack}>
+            ← Back
+          </button>
           {loading ? (
             <div className="movie-detail__status" role="status">
               <span className="loading-spinner" aria-hidden="true" />
@@ -203,16 +206,10 @@ const MovieDetailPage = () => {
                 <button type="button" onClick={fetchMovie}>
                   Retry
                 </button>
-                <button type="button" className="ghost-btn" onClick={handleBack}>
-                  Back
-                </button>
               </div>
             </div>
           ) : movie ? (
             <div className="movie-detail__content" aria-live="polite">
-              <button type="button" className="detail-back-btn" onClick={handleBack}>
-                ← Back
-              </button>
               <div className="movie-detail__hero">
                 <div className="movie-detail__poster">
                   <img src={posterUrl} alt={`${movie.title} poster`} />
@@ -260,9 +257,6 @@ const MovieDetailPage = () => {
                       onClick={handleWishlistToggle}
                     >
                       {isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-                    </button>
-                    <button type="button" className="ghost-btn" onClick={handleBack}>
-                      Back
                     </button>
                   </div>
                 </div>
