@@ -4,6 +4,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
 import MovieDetailPage from './pages/MovieDetailPage'
 import PopularPage from './pages/PopularPage'
+import ProfilePage from './pages/ProfilePage'
 import SearchPage from './pages/SearchPage'
 import SignInPage from './pages/SignInPage'
 import WishlistPage from './pages/WishlistPage'
@@ -19,6 +20,7 @@ function App() {
           <Route path="popular" element={<PopularPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="wishlist" element={<WishlistPage />} />
+          <Route path="profile" element={<ProfilePage />} />
           <Route path="movie/:id" element={<MovieDetailPage />} />
         </Route>
       </Route>

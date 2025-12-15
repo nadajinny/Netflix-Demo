@@ -6,6 +6,7 @@ const navItems = [
   { path: '/popular', label: 'Popular' },
   { path: '/search', label: 'Search' },
   { path: '/wishlist', label: 'Wishlist' },
+  { path: '/profile', label: 'Profile' },
 ]
 
 const AppLayout = () => {
