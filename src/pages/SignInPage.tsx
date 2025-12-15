@@ -153,7 +153,7 @@ const SignInPage = () => {
         <div className="auth-body">
           <section className="auth-copy">
             <p className="eyebrow">NaDaflix에 오신 것을 환영합니다</p>
-            <h1>이메일과 TMDB 키만으로 바로 즐겨보세요.</h1>
+            <h1>최신 인기작부터 숨은 명작까지 한곳에서 만나보세요.</h1>
             <p className="supporting">
               등록한 TMDB 키는 이 기기에 안전하게 보관되며 언제든지 변경하거나 삭제할 수 있습니다.
             </p>
