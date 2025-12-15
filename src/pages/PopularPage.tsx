@@ -24,14 +24,14 @@ const PopularPage = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('table')
   const [movies, setMovies] = useState<Movie[]>([])
   const [page, setPage] = useState(1)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [hasMore, setHasMore] = useState(true)
   const [isSwitching, setIsSwitching] = useState(false)
   const [showTopButton, setShowTopButton] = useState(false)
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
 
   const requestController = useRef<AbortController | null>(null)
-  const loadingRef = useRef(false)
   const scrollDebounceRef = useRef<number | null>(null)
   const pendingPageRef = useRef<number | null>(null)
 
@@ -53,11 +53,6 @@ const PopularPage = () => {
         setHasMore(false)
         setError('Add your TMDB API key on the sign-in page to load popular titles.')
         setLoading(false)
-        loadingRef.current = false
-        return
-      }
-
-      if (loadingRef.current) {
         return
       }
 
@@ -66,7 +61,6 @@ const PopularPage = () => {
       const controller = new AbortController()
       requestController.current?.abort()
       requestController.current = controller
-      loadingRef.current = true
       setLoading(true)
       setError(null)
 
@@ -118,6 +112,7 @@ const PopularPage = () => {
           const deduped = normalized.filter((item) => !existingIds.has(item.id))
           return [...current, ...deduped]
         })
+        setHasLoadedOnce(true)
 
         const newPage = payload.page ?? targetPage
         setPage(newPage)
@@ -140,7 +135,6 @@ const PopularPage = () => {
         if (requestController.current === controller) {
           requestController.current = null
         }
-        loadingRef.current = false
         setLoading(false)
       }
     },
@@ -153,11 +147,13 @@ const PopularPage = () => {
     }
   }, [])
 
-  useEffect(() => {
+  const resetAndLoadFirstPage = useCallback(() => {
     setMovies([])
     setPage(1)
     setHasMore(true)
     pendingPageRef.current = null
+    setLoading(true)
+    setHasLoadedOnce(false)
 
     if (!resolvedKey) {
       setError('Add your TMDB key via the sign-in page to unlock the popular catalog.')
@@ -166,7 +162,11 @@ const PopularPage = () => {
     }
 
     fetchMovies(1, false)
-  }, [fetchMovies, resolvedKey, viewMode])
+  }, [fetchMovies, resolvedKey])
+
+  useEffect(() => {
+    resetAndLoadFirstPage()
+  }, [resetAndLoadFirstPage])
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
@@ -225,6 +225,7 @@ const PopularPage = () => {
     if (mode === viewMode) return
     setIsSwitching(true)
     setViewMode(mode)
+    resetAndLoadFirstPage()
   }
 
   const handlePaginate = (direction: 'previous' | 'next') => {
@@ -250,7 +251,7 @@ const PopularPage = () => {
       ? 'Wishlist is empty. Tap any movie card to save it for later.'
       : `${wishlist.length} saved in wishlist - synced with LocalStorage`
 
-  const showEmptyState = !loading && !error && movies.length === 0
+  const showEmptyState = hasLoadedOnce && !loading && !error && movies.length === 0
   const showStageOverlay = loading && (viewMode === 'table' || movies.length === 0)
 
   return (
